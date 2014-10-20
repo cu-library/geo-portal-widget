@@ -1,0 +1,66 @@
+<html>
+<head>   
+  <style>
+  input.geoPortalError{
+    border: thin solid darkred;
+  }
+  </style>
+  <script type="text/javascript">
+  
+    function removeSomeUnsafeChars(unsafe) {
+      return unsafe
+        .replace(/&/g, '')
+        .replace(/</g, '')
+        .replace(/>/g, '')
+        .replace(/\//g, '')
+        .replace(/\\/g, '')
+        .replace(/\(/g, '')
+        .replace(/\)/g, '')
+        .replace(/\;/g, '')
+        .replace(/\./g, '')
+        .replace(/\"/g, '')
+        .replace(/\'/g, ''); 
+    }
+  
+    window.addEventListener("load", function () {
+  
+      function searchGeoPortal(query) {
+        var builtUrl = "http://geo1.scholarsportal.info/#r/search/_queries@=";
+        builtUrl +=  encodeURIComponent(removeSomeUnsafeChars(query));
+        builtUrl += ";&fields@=;&sort=relevance&limit=entitled";
+        window.location.href = builtUrl;
+      }
+     
+      var form = document.getElementById("geoportalserchwidget");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); 
+        var queryFormElement = document.getElementById('geoportalquery')
+  
+        if (queryFormElement.value === "") {
+          if (queryFormElement.className.indexOf("geoPortalError") == -1) {
+            if (queryFormElement.className === ""){
+              queryFormElement.className = queryFormElement.className + "geoPortalError";
+            }
+            else {
+              queryFormElement.className = queryFormElement.className + " geoPortalError";
+            }
+          }
+        } 
+        else {
+          searchGeoPortal(queryFormElement.value);  
+        }
+      });
+  
+    });
+  </script>
+</head>
+
+<body>
+  <form id="geoportalserchwidget">
+    <label for="name">Query:</label>
+    <input type="text" id="geoportalquery" name="geoportalquery" />
+    <input type="submit" value="Go" />
+  </form>
+</body>
+
+</html>
